@@ -18,9 +18,11 @@ Il est possible de faire appel à des jours de consulting pour l'implémentation
 # Instructions
 
     * Créez une source de données connectée à la base de données PostgreSQL Visual TOM dans Grafana
-    * Importez les tableaux de bord dans Grafana
-        * Mettez à jour la source de données
-        * Mettez à jour les variables dans le tableau de bord *Visual TOM Monitoring*
+    * Mettez à jour la source de données dans les fichiers json : remplacer 
+         "type": "grafana-postgresql-datasource",
+         "uid": "cxO6FYlvk" par l'uid de votre datasource dans grafana
+    * Importez les tableaux de bord  dans Grafana
+    * Mettez à jour les variables dans le tableau de bord *Visual TOM Monitoring*
     * Importez le bundle GRAFANA.xbdle dans le Self Service de User Portal
         * Mettez à jour la source de données dans le bundle    
 
