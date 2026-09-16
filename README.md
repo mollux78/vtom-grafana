@@ -18,9 +18,11 @@ Consultings days can be requested to help for the implementation.
 # Instructions
 
   * Create a datasource connected to Visual TOM PostgreSQL database in Grafana
-  * Import the dashboards in Grafana
-    * Update the datasource
-    * Update the variables in the dashboard *Visual TOM Monitoring*
+  *  Update the datasource in json's files : replace
+     "type": "grafana-postgresql-datasource",
+     "uid": "cxO6FYlvk" by your datasource uid grafana
+  * Import the dashboards json in Grafana
+  * Update the variables in the dashboard *Visual TOM Monitoring*
   * Import the bundle GRAFANA.xbdle into User Portal
     * Update the datasource in the bundle  
 
