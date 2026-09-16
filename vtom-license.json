@@ -1,41 +1,4 @@
 {
-    "meta": {
-        "type": "db",
-        "canSave": true,
-        "canEdit": true,
-        "canAdmin": false,
-        "canStar": true,
-        "canDelete": true,
-        "slug": "visual-tom-license-monitoring",
-        "url": "/d/cdjkt41ot65tsf/visual-tom-license-monitoring",
-        "expires": "0001-01-01T00:00:00Z",
-        "created": "2024-05-02T13:08:36Z",
-        "updated": "2024-07-11T10:06:59Z",
-        "updatedBy": "Absyss",
-        "createdBy": "Absyss",
-        "version": 49,
-        "hasAcl": false,
-        "isFolder": false,
-        "folderId": 0,
-        "folderUid": "",
-        "folderTitle": "General",
-        "folderUrl": "",
-        "provisioned": false,
-        "provisionedExternalId": "",
-        "annotationsPermissions": {
-            "dashboard": {
-                "canAdd": true,
-                "canEdit": true,
-                "canDelete": true
-            },
-            "organization": {
-                "canAdd": true,
-                "canEdit": true,
-                "canDelete": true
-            }
-        }
-    },
-    "dashboard": {
         "annotations": {
             "list": [
                 {
@@ -62,7 +25,7 @@
             {
                 "datasource": {
                     "type": "grafana-postgresql-datasource",
-                    "uid": "bdjtgy9rgn0u8d"
+                    "uid": "cxO6FYlvk"
                 },
                 "description": "Red line is \"Allowed avg executions\"",
                 "fieldConfig": {
@@ -177,7 +140,7 @@
                     {
                         "datasource": {
                             "type": "grafana-postgresql-datasource",
-                            "uid": "bdjtgy9rgn0u8d"
+                            "uid": "cxO6FYlvk"
                         },
                         "editorMode": "code",
                         "format": "table",
@@ -224,7 +187,7 @@
             {
                 "datasource": {
                     "type": "grafana-postgresql-datasource",
-                    "uid": "bdjtgy9rgn0u8d"
+                    "uid": "cxO6FYlvk"
                 },
                 "fieldConfig": {
                     "defaults": {
@@ -333,7 +296,7 @@
             {
                 "datasource": {
                     "type": "grafana-postgresql-datasource",
-                    "uid": "bdjtgy9rgn0u8d"
+                    "uid": "cxO6FYlvk"
                 },
                 "description": "Monitor the number of Jobs created compared to the license allowance.",
                 "fieldConfig": {
@@ -443,7 +406,7 @@
             {
                 "datasource": {
                     "type": "grafana-postgresql-datasource",
-                    "uid": "bdjtgy9rgn0u8d"
+                    "uid": "cxO6FYlvk"
                 },
                 "description": "Monitor the number of Agents used compared to the license allowance.",
                 "fieldConfig": {
@@ -553,7 +516,7 @@
             {
                 "datasource": {
                     "type": "grafana-postgresql-datasource",
-                    "uid": "bdjtgy9rgn0u8d"
+                    "uid": "cxO6FYlvk"
                 },
                 "description": "",
                 "fieldConfig": {
@@ -650,7 +613,7 @@
                     {
                         "datasource": {
                             "type": "grafana-postgresql-datasource",
-                            "uid": "bdjtgy9rgn0u8d"
+                            "uid": "cxO6FYlvk"
                         },
                         "editorMode": "code",
                         "format": "table",
@@ -678,7 +641,7 @@
                     {
                         "datasource": {
                             "type": "grafana-postgresql-datasource",
-                            "uid": "bdjtgy9rgn0u8d"
+                            "uid": "cxO6FYlvk"
                         },
                         "editorMode": "code",
                         "format": "table",
@@ -707,7 +670,7 @@
                     {
                         "datasource": {
                             "type": "grafana-postgresql-datasource",
-                            "uid": "bdjtgy9rgn0u8d"
+                            "uid": "cxO6FYlvk"
                         },
                         "editorMode": "code",
                         "format": "table",
@@ -736,7 +699,7 @@
                     {
                         "datasource": {
                             "type": "grafana-postgresql-datasource",
-                            "uid": "bdjtgy9rgn0u8d"
+                            "uid": "cxO6FYlvk"
                         },
                         "editorMode": "code",
                         "format": "table",
@@ -778,7 +741,7 @@
             {
                 "datasource": {
                     "type": "grafana-postgresql-datasource",
-                    "uid": "bdjtgy9rgn0u8d"
+                    "uid": "cxO6FYlvk"
                 },
                 "description": "Expiration of Visual TOM license.   \nContact Absyss support if end is close",
                 "fieldConfig": {
@@ -900,5 +863,4 @@
         "uid": "cdjkt41ot65tsf",
         "version": 49,
         "weekStart": ""
-    }
 }

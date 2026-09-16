@@ -1,1269 +1,1231 @@
 {
-    "meta": {
-        "type": "db",
-        "canSave": true,
-        "canEdit": true,
-        "canAdmin": false,
-        "canStar": true,
-        "canDelete": true,
-        "slug": "visual-tom-monitoring",
-        "url": "/d/adjkwqjegmygwb/visual-tom-monitoring",
-        "expires": "0001-01-01T00:00:00Z",
-        "created": "2024-05-02T13:06:11Z",
-        "updated": "2024-07-11T11:02:27Z",
-        "updatedBy": "Absyss",
-        "createdBy": "Absyss",
-        "version": 55,
-        "hasAcl": false,
-        "isFolder": false,
-        "folderId": 0,
-        "folderUid": "",
-        "folderTitle": "General",
-        "folderUrl": "",
-        "provisioned": false,
-        "provisionedExternalId": "",
-        "annotationsPermissions": {
-            "dashboard": {
-                "canAdd": true,
-                "canEdit": true,
-                "canDelete": true
-            },
-            "organization": {
-                "canAdd": true,
-                "canEdit": true,
-                "canDelete": true
-            }
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
         }
+      ]
     },
-    "dashboard": {
-        "annotations": {
-            "list": [
-                {
-                    "builtIn": 1,
-                    "datasource": {
-                        "type": "grafana",
-                        "uid": "-- Grafana --"
-                    },
-                    "enable": true,
-                    "hide": true,
-                    "iconColor": "rgba(0, 211, 255, 1)",
-                    "name": "Annotations & Alerts",
-                    "type": "dashboard"
-                }
-            ]
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": null,
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": true,
+        "title": "VTOM XVision",
+        "tooltip": "",
+        "type": "link",
+        "url": "https://${vtom_server_name}/xvision/login?redirect=%2Fdashboard"
+      }
+    ],
+    "panels": [
+      {
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "cxO6FYlvk"
         },
-        "editable": true,
-        "fiscalYearStartMonth": 0,
-        "graphTooltip": 0,
-        "id": 2,
-        "links": [
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
             {
-                "asDropdown": false,
-                "icon": "external link",
-                "includeVars": false,
-                "keepTime": false,
-                "tags": [],
+              "matcher": {
+                "id": "byRegexp",
+                "options": ".*(?<!name)$"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 150
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "vtid"
+              },
+              "properties": [
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Agent name"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Go to Agent's webpage on XVision",
+                      "url": "https://${vtom_server_name}/xvision/monitoring/host(right:agent-properties/${__data.fields.vtid})?rNav=open"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 10,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "11.0.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-postgresql-datasource",
+              "uid": "cxO6FYlvk"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT  vtid,\r\n  vtname \"Agent name\", vthostname \"Hostname\",\r\n  CASE vtbdaemonstatus\r\n    WHEN 0 THEN '⁉️ Undetermined'\r\n    WHEN 0 THEN '♻️ Check'\r\n    WHEN 4 THEN '⚠️ Network error'\r\n    WHEN 8 THEN '⛔ Stopped'\r\n    WHEN 16 THEN '✅ Running'\r\n    WHEN 32 THEN '⏸️ Suspended'\r\n    END \"Agent status\",\r\n      CASE vtmanagerstatus\r\n    WHEN 0 THEN '⁉️ Undetermined'\r\n    WHEN 0 THEN '♻️ Check'\r\n    WHEN 4 THEN '⚠️ Network error'\r\n    WHEN 8 THEN '⛔ Stopped'\r\n    WHEN 16 THEN '✅ Running'\r\n    WHEN 32 THEN '⏸️ Suspended'\r\n    END \"Manager status\"\r\n    FROM\r\n      vt_core_hosts",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [
+                    {
+                      "name": "vtname",
+                      "type": "functionParameter"
+                    }
+                  ],
+                  "type": "function"
+                },
+                {
+                  "parameters": [
+                    {
+                      "name": "vthostname",
+                      "type": "functionParameter"
+                    }
+                  ],
+                  "type": "function"
+                },
+                {
+                  "parameters": [
+                    {
+                      "name": "vtbdaemonstatus",
+                      "type": "functionParameter"
+                    }
+                  ],
+                  "type": "function"
+                },
+                {
+                  "parameters": [
+                    {
+                      "name": "vtmanagerstatus",
+                      "type": "functionParameter"
+                    }
+                  ],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            },
+            "table": "vt_core_hosts"
+          }
+        ],
+        "title": "Agents monitoring",
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "cxO6FYlvk"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Action"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "",
+                      "url": "https://${vitc_server_name}/selfget.jsp?token=${vitc_token}&bundle=GRAFANA&service=${__data.fields.Action}Engine&sender=Grafana&forms={%22Env%22:%22${__data.fields.Environment}%22}"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.width",
+                  "value": 150
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Environment"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "",
+                      "url": "https://${vtom_server_name}/xvision/graph/${__data.fields.Environment}(right:environment-properties/${__data.fields.Environment})?rNav=open&mode=superviser"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Status"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 150
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "id": 7,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "11.0.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-postgresql-datasource",
+              "uid": "cxO6FYlvk"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT\r\n  vtname as \"Environment\",\r\n  CASE\r\n    WHEN vtenginepid = 0 THEN 'Stopped 🔴'\r\n    WHEN vtenginepid <> 0 THEN 'Running 🟢'\r\n  END \"Status\",\r\n    CASE\r\n    WHEN vtenginepid = 0 THEN 'Start'\r\n    WHEN vtenginepid <> 0 THEN 'Stop'\r\nEND \"Action\"\r\nFROM\r\n  vt_core_environments\r\nWHERE\r\n  CASE\r\n    WHEN \r\n      $Environments <> 'all' THEN vt_core_environments.vtname = $Environments\r\n    ELSE \r\n      TRUE\r\n  END",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          }
+        ],
+        "title": "Environments monitoring",
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "cxO6FYlvk"
+        },
+        "description": "Threshold is avg for last 30 days",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "fillOpacity": 50,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineWidth": 1,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "thresholdsStyle": {
+                "mode": "dashed"
+              }
+            },
+            "links": [
+              {
                 "targetBlank": true,
-                "title": "VTOM XVision",
-                "tooltip": "",
-                "type": "link",
-                "url": "https://${vtom_server_name}/xvision/login?redirect=%2Fdashboard"
-            }
-        ],
-        "panels": [
-            {
-                "datasource": {
-                    "type": "grafana-postgresql-datasource",
-                    "uid": "bdjtgy9rgn0u8d"
-                },
-                "fieldConfig": {
-                    "defaults": {
-                        "color": {
-                            "mode": "thresholds"
-                        },
-                        "custom": {
-                            "align": "auto",
-                            "cellOptions": {
-                                "type": "auto"
-                            },
-                            "inspect": false
-                        },
-                        "mappings": [],
-                        "thresholds": {
-                            "mode": "absolute",
-                            "steps": [
-                                {
-                                    "color": "green",
-                                    "value": null
-                                },
-                                {
-                                    "color": "red",
-                                    "value": 80
-                                }
-                            ]
-                        }
-                    },
-                    "overrides": [
-                        {
-                            "matcher": {
-                                "id": "byRegexp",
-                                "options": ".*(?<!name)$"
-                            },
-                            "properties": [
-                                {
-                                    "id": "custom.width",
-                                    "value": 150
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "vtid"
-                            },
-                            "properties": [
-                                {
-                                    "id": "custom.hidden",
-                                    "value": true
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "Agent name"
-                            },
-                            "properties": [
-                                {
-                                    "id": "links",
-                                    "value": [
-                                        {
-                                            "targetBlank": true,
-                                            "title": "Go to Agent's webpage on XVision",
-                                            "url": "https://${vtom_server_name}/xvision/monitoring/host(right:agent-properties/${__data.fields.vtid})?rNav=open"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                "gridPos": {
-                    "h": 8,
-                    "w": 12,
-                    "x": 0,
-                    "y": 0
-                },
-                "id": 10,
-                "options": {
-                    "cellHeight": "sm",
-                    "footer": {
-                        "countRows": false,
-                        "fields": "",
-                        "reducer": [
-                            "sum"
-                        ],
-                        "show": false
-                    },
-                    "showHeader": true
-                },
-                "pluginVersion": "11.0.0",
-                "targets": [
-                    {
-                        "datasource": {
-                            "type": "grafana-postgresql-datasource",
-                            "uid": "bdjtgy9rgn0u8d"
-                        },
-                        "editorMode": "code",
-                        "format": "table",
-                        "rawQuery": true,
-                        "rawSql": "SELECT  vtid,\r\n  vtname \"Agent name\", vthostname \"Hostname\",\r\n  CASE vtbdaemonstatus\r\n    WHEN 0 THEN '\u2049\ufe0f Undetermined'\r\n    WHEN 0 THEN '\u267b\ufe0f Check'\r\n    WHEN 4 THEN '\u26a0\ufe0f Network error'\r\n    WHEN 8 THEN '\u26d4 Stopped'\r\n    WHEN 16 THEN '\u2705 Running'\r\n    WHEN 32 THEN '\u23f8\ufe0f Suspended'\r\n    END \"Agent status\",\r\n      CASE vtmanagerstatus\r\n    WHEN 0 THEN '\u2049\ufe0f Undetermined'\r\n    WHEN 0 THEN '\u267b\ufe0f Check'\r\n    WHEN 4 THEN '\u26a0\ufe0f Network error'\r\n    WHEN 8 THEN '\u26d4 Stopped'\r\n    WHEN 16 THEN '\u2705 Running'\r\n    WHEN 32 THEN '\u23f8\ufe0f Suspended'\r\n    END \"Manager status\"\r\n    FROM\r\n      vt_core_hosts",
-                        "refId": "A",
-                        "sql": {
-                            "columns": [
-                                {
-                                    "parameters": [
-                                        {
-                                            "name": "vtname",
-                                            "type": "functionParameter"
-                                        }
-                                    ],
-                                    "type": "function"
-                                },
-                                {
-                                    "parameters": [
-                                        {
-                                            "name": "vthostname",
-                                            "type": "functionParameter"
-                                        }
-                                    ],
-                                    "type": "function"
-                                },
-                                {
-                                    "parameters": [
-                                        {
-                                            "name": "vtbdaemonstatus",
-                                            "type": "functionParameter"
-                                        }
-                                    ],
-                                    "type": "function"
-                                },
-                                {
-                                    "parameters": [
-                                        {
-                                            "name": "vtmanagerstatus",
-                                            "type": "functionParameter"
-                                        }
-                                    ],
-                                    "type": "function"
-                                }
-                            ],
-                            "groupBy": [
-                                {
-                                    "property": {
-                                        "type": "string"
-                                    },
-                                    "type": "groupBy"
-                                }
-                            ],
-                            "limit": 50
-                        },
-                        "table": "vt_core_hosts"
-                    }
-                ],
-                "title": "Agents monitoring",
-                "type": "table"
-            },
-            {
-                "datasource": {
-                    "type": "grafana-postgresql-datasource",
-                    "uid": "bdjtgy9rgn0u8d"
-                },
-                "fieldConfig": {
-                    "defaults": {
-                        "custom": {
-                            "align": "auto",
-                            "cellOptions": {
-                                "type": "auto"
-                            },
-                            "filterable": true,
-                            "inspect": false
-                        },
-                        "mappings": [],
-                        "thresholds": {
-                            "mode": "absolute",
-                            "steps": [
-                                {
-                                    "color": "green",
-                                    "value": null
-                                },
-                                {
-                                    "color": "red",
-                                    "value": 80
-                                }
-                            ]
-                        }
-                    },
-                    "overrides": [
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "Action"
-                            },
-                            "properties": [
-                                {
-                                    "id": "links",
-                                    "value": [
-                                        {
-                                            "targetBlank": true,
-                                            "title": "",
-                                            "url": "https://${vitc_server_name}/selfget.jsp?token=${vitc_token}&bundle=GRAFANA&service=${__data.fields.Action}Engine&sender=Grafana&forms={%22Env%22:%22${__data.fields.Environment}%22}"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "id": "custom.width",
-                                    "value": 150
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "Environment"
-                            },
-                            "properties": [
-                                {
-                                    "id": "links",
-                                    "value": [
-                                        {
-                                            "targetBlank": true,
-                                            "title": "",
-                                            "url": "https://${vtom_server_name}/xvision/graph/${__data.fields.Environment}(right:environment-properties/${__data.fields.Environment})?rNav=open&mode=superviser"
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "Status"
-                            },
-                            "properties": [
-                                {
-                                    "id": "custom.width",
-                                    "value": 150
-                                }
-                            ]
-                        }
-                    ]
-                },
-                "gridPos": {
-                    "h": 8,
-                    "w": 12,
-                    "x": 12,
-                    "y": 0
-                },
-                "id": 7,
-                "options": {
-                    "cellHeight": "sm",
-                    "footer": {
-                        "countRows": false,
-                        "fields": "",
-                        "reducer": [
-                            "sum"
-                        ],
-                        "show": false
-                    },
-                    "showHeader": true,
-                    "sortBy": []
-                },
-                "pluginVersion": "11.0.0",
-                "targets": [
-                    {
-                        "datasource": {
-                            "type": "grafana-postgresql-datasource",
-                            "uid": "ediu5svd8blz4e"
-                        },
-                        "editorMode": "code",
-                        "format": "table",
-                        "rawQuery": true,
-                        "rawSql": "SELECT\r\n  vtname as \"Environment\",\r\n  CASE\r\n    WHEN vtenginepid = 0 THEN 'Stopped \ud83d\udd34'\r\n    WHEN vtenginepid <> 0 THEN 'Running \ud83d\udfe2'\r\n  END \"Status\",\r\n    CASE\r\n    WHEN vtenginepid = 0 THEN 'Start'\r\n    WHEN vtenginepid <> 0 THEN 'Stop'\r\nEND \"Action\"\r\nFROM\r\n  vt_core_environments\r\nWHERE\r\n  CASE\r\n    WHEN \r\n      $Environments <> 'all' THEN vt_core_environments.vtname = $Environments\r\n    ELSE \r\n      TRUE\r\n  END",
-                        "refId": "A",
-                        "sql": {
-                            "columns": [
-                                {
-                                    "parameters": [],
-                                    "type": "function"
-                                }
-                            ],
-                            "groupBy": [
-                                {
-                                    "property": {
-                                        "type": "string"
-                                    },
-                                    "type": "groupBy"
-                                }
-                            ],
-                            "limit": 50
-                        }
-                    }
-                ],
-                "title": "Environments monitoring",
-                "type": "table"
-            },
-            {
-                "datasource": {
-                    "type": "grafana-postgresql-datasource",
-                    "uid": "bdjtgy9rgn0u8d"
-                },
-                "description": "Threshold is avg for last 30 days",
-                "fieldConfig": {
-                    "defaults": {
-                        "color": {
-                            "mode": "palette-classic"
-                        },
-                        "custom": {
-                            "axisBorderShow": false,
-                            "axisCenteredZero": false,
-                            "axisColorMode": "text",
-                            "axisLabel": "",
-                            "axisPlacement": "auto",
-                            "fillOpacity": 50,
-                            "gradientMode": "none",
-                            "hideFrom": {
-                                "legend": false,
-                                "tooltip": false,
-                                "viz": false
-                            },
-                            "lineWidth": 1,
-                            "scaleDistribution": {
-                                "type": "linear"
-                            },
-                            "thresholdsStyle": {
-                                "mode": "dashed"
-                            }
-                        },
-                        "links": [
-                            {
-                                "targetBlank": true,
-                                "title": "Go to history in XVision",
-                                "url": "https://${vtom_server_name}/xvision/history/job-execution?job-execution-history=%7B\"status\":%5B3%5D,\"period\":%7B\"from\":%7B${__data.fields.filter}%7D,\"to\":%7B${__data.fields.filter}%7D%7D%7D${__data.fields.filterenvtapp}"
-                            }
-                        ],
-                        "mappings": [],
-                        "thresholds": {
-                            "mode": "absolute",
-                            "steps": [
-                                {
-                                    "color": "green",
-                                    "value": null
-                                },
-                                {
-                                    "color": "red",
-                                    "value": 80
-                                }
-                            ]
-                        },
-                        "unit": "short"
-                    },
-                    "overrides": []
-                },
-                "gridPos": {
-                    "h": 7,
-                    "w": 12,
-                    "x": 0,
-                    "y": 8
-                },
-                "id": 11,
-                "options": {
-                    "barRadius": 0,
-                    "barWidth": 0.97,
-                    "fullHighlight": false,
-                    "groupWidth": 0.7,
-                    "legend": {
-                        "calcs": [
-                            "lastNotNull"
-                        ],
-                        "displayMode": "list",
-                        "placement": "bottom",
-                        "showLegend": false
-                    },
-                    "orientation": "auto",
-                    "showValue": "never",
-                    "stacking": "none",
-                    "tooltip": {
-                        "maxHeight": 600,
-                        "mode": "single",
-                        "sort": "none"
-                    },
-                    "xField": "day",
-                    "xTickLabelRotation": -45,
-                    "xTickLabelSpacing": 0
-                },
-                "targets": [
-                    {
-                        "datasource": {
-                            "type": "grafana-postgresql-datasource",
-                            "uid": "ediu5svd8blz4e"
-                        },
-                        "editorMode": "code",
-                        "format": "table",
-                        "rawQuery": true,
-                        "rawSql": "SELECT \r\n  --vtenvname as Environnement ,\r\n  vtexpdatevalue::date as Day,\r\n  '\"year\":'||DATE_PART('year',vtexpdatevalue)||',\"month\":'||DATE_PART('month',vtexpdatevalue)\r\n  ||',\"day\":'||DATE_PART('day',vtexpdatevalue) as Filter ,\r\nCASE \r\n    WHEN $Environments <> 'all' THEN\r\n      CASE WHEN $Applications <> 'all' THEN \r\n       '&filters={\"condition\":\"AND\",\"filters\":{\"environments\":{\"name\":{\"comparator\":\"EQUALS\",\"valueToCompare\":\"'||$Environments||'\"}},\"applications\":{\"name\":{\"comparator\":\"EQUALS\",\"valueToCompare\":\"'||$Applications||'\"}}}}'\r\n      ELSE\r\n        '&filters={\"condition\":\"AND\",\"filters\":{\"environments\":{\"name\":{\"comparator\":\"EQUALS\",\"valueToCompare\":\"'||$Environments||'\"}}}}'\r\n      END\r\n    ELSE\r\n      ''\r\n    END filterEnvtApp,\r\n  count(*) as Nombre\r\nFROM vt_stats_job \r\nWHERE CASE \r\n    WHEN $Environments <> 'all' THEN\r\n      CASE WHEN $Applications <> 'all' THEN \r\n        vtstatus=4 AND vtexpdatevalue >= CURRENT_DATE - INTERVAL '30 days' AND vtenvname = $Environments AND vtapplname = $Applications \r\n      ELSE\r\n        vtstatus=4 AND vtexpdatevalue >= CURRENT_DATE - INTERVAL '30 days' AND vtenvname = $Environments\r\n      END\r\n    ELSE\r\n      vtstatus=4 AND vtexpdatevalue >= CURRENT_DATE - INTERVAL '30 days'\r\n    END\r\nGROUP BY --vtenvname,\r\n vtexpdatevalue\r\n order by to_char(vtexpdatevalue,'YYYYMMDD')",
-                        "refId": "A",
-                        "sql": {
-                            "columns": [
-                                {
-                                    "parameters": [],
-                                    "type": "function"
-                                }
-                            ],
-                            "groupBy": [
-                                {
-                                    "property": {
-                                        "type": "string"
-                                    },
-                                    "type": "groupBy"
-                                }
-                            ],
-                            "limit": 50
-                        }
-                    },
-                    {
-                        "datasource": {
-                            "type": "grafana-postgresql-datasource",
-                            "uid": "bdjtgy9rgn0u8d"
-                        },
-                        "editorMode": "code",
-                        "format": "table",
-                        "hide": false,
-                        "rawQuery": true,
-                        "rawSql": "SELECT \r\n  count(*)/30 as AvgErrors\r\nFROM vt_stats_job \r\nWHERE CASE \r\n    WHEN $Environments <> 'all' THEN\r\n      CASE WHEN $Applications <> 'all' THEN \r\n        vtstatus=4 AND vtexpdatevalue >= CURRENT_DATE - INTERVAL '30 days' AND vtenvname = $Environments AND vtapplname = $Applications \r\n      ELSE\r\n        vtstatus=4 AND vtexpdatevalue >= CURRENT_DATE - INTERVAL '30 days' AND vtenvname = $Environments\r\n      END\r\n    ELSE\r\n      vtstatus=4 AND vtexpdatevalue >= CURRENT_DATE - INTERVAL '30 days'\r\n    END",
-                        "refId": "B",
-                        "sql": {
-                            "columns": [
-                                {
-                                    "parameters": [],
-                                    "type": "function"
-                                }
-                            ],
-                            "groupBy": [
-                                {
-                                    "property": {
-                                        "type": "string"
-                                    },
-                                    "type": "groupBy"
-                                }
-                            ],
-                            "limit": 50
-                        }
-                    }
-                ],
-                "title": "Number of errors per day",
-                "transformations": [
-                    {
-                        "id": "configFromData",
-                        "options": {
-                            "configRefId": "B",
-                            "mappings": [
-                                {
-                                    "fieldName": "avgerrors",
-                                    "handlerKey": "threshold1"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "id": "formatTime",
-                        "options": {
-                            "outputFormat": "DD-MMM",
-                            "timeField": "day",
-                            "useTimezone": true
-                        }
-                    }
-                ],
-                "type": "barchart"
-            },
-            {
-                "datasource": {
-                    "type": "grafana-postgresql-datasource",
-                    "uid": "bdjtgy9rgn0u8d"
-                },
-                "description": "Blocked and late dates",
-                "fieldConfig": {
-                    "defaults": {
-                        "custom": {
-                            "align": "auto",
-                            "cellOptions": {
-                                "type": "auto"
-                            },
-                            "inspect": false
-                        },
-                        "mappings": [],
-                        "noValue": "No locked dates",
-                        "thresholds": {
-                            "mode": "absolute",
-                            "steps": [
-                                {
-                                    "color": "green",
-                                    "value": null
-                                },
-                                {
-                                    "color": "red",
-                                    "value": 80
-                                }
-                            ]
-                        }
-                    },
-                    "overrides": [
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "Nb of blocking Jobs"
-                            },
-                            "properties": [
-                                {
-                                    "id": "custom.width",
-                                    "value": 235
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "Type"
-                            },
-                            "properties": [
-                                {
-                                    "id": "custom.width",
-                                    "value": 103
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "Switch time"
-                            },
-                            "properties": [
-                                {
-                                    "id": "custom.width",
-                                    "value": 106
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "vtid"
-                            },
-                            "properties": [
-                                {
-                                    "id": "custom.hidden",
-                                    "value": true
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "Date"
-                            },
-                            "properties": [
-                                {
-                                    "id": "links",
-                                    "value": [
-                                        {
-                                            "targetBlank": true,
-                                            "title": "Go to Visual TOM Dates monitoring",
-                                            "url": "https://${vtom_server_name}/xvision/monitoring/date(right:date-properties/${__data.fields.vtid})?rNav=open"
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "Value"
-                            },
-                            "properties": [
-                                {
-                                    "id": "custom.width",
-                                    "value": 111
-                                }
-                            ]
-                        }
-                    ]
-                },
-                "gridPos": {
-                    "h": 7,
-                    "w": 12,
-                    "x": 12,
-                    "y": 8
-                },
-                "id": 6,
-                "options": {
-                    "cellHeight": "sm",
-                    "footer": {
-                        "countRows": false,
-                        "fields": "",
-                        "reducer": [
-                            "sum"
-                        ],
-                        "show": false
-                    },
-                    "showHeader": true,
-                    "sortBy": [
-                        {
-                            "desc": false,
-                            "displayName": "Status"
-                        }
-                    ]
-                },
-                "pluginVersion": "11.0.0",
-                "targets": [
-                    {
-                        "datasource": {
-                            "type": "grafana-postgresql-datasource",
-                            "uid": "ediu5svd8blz4e"
-                        },
-                        "editorMode": "code",
-                        "format": "table",
-                        "rawQuery": true,
-                        "rawSql": "SELECT CASE WHEN COUNT(vtjobsid)>0 THEN '\ud83d\udd12Blocked' ELSE '' END || CASE WHEN (left(text(to_timestamp(vtvalue/1000000)),10)::date!=CURRENT_DATE AND (vtswitchtime * interval '1 sec'- INTERVAL '24 hours')::time < CURRENT_TIME) THEN '\ud83d\udd52Late' ELSE '' END \"Status\",\r\nLEFT(text(to_timestamp(vtvalue/1000000)),10) \"Value\", vtname \"Date\", (vtswitchtime * interval '1 sec') \"Switch time\",\r\nCASE vttype WHEN 'A' THEN 'Automatic' WHEN 'S' THEN 'System' ELSE 'Constant' END \"Type\",\r\nCASE vtrecovery WHEN '0' THEN '\u2714\ufe0f' ELSE '-' END \"Automatic recovery\", CASE WHEN COUNT(vtjobsid)>0 THEN COUNT(vtjobsid)|| ' Jobs' ELSE '-' END \"Blocking Jobs\", vtid from vt_core_dates dates\r\nLEFT JOIN vt_core_date_blocking_jobs bloc_jobs ON dates.vtid=bloc_jobs.vtdateid\r\nWHERE (left(text(to_timestamp(vtvalue/1000000)),10)::date!=CURRENT_DATE AND (vtswitchtime * interval '1 sec'- INTERVAL '24 hours')::time < CURRENT_TIME)\r\nOR vtjobsid IS NOT NULL\r\nGROUP BY vtid",
-                        "refId": "Date bloqu\u00e9e",
-                        "sql": {
-                            "columns": [
-                                {
-                                    "parameters": [],
-                                    "type": "function"
-                                }
-                            ],
-                            "groupBy": [
-                                {
-                                    "property": {
-                                        "type": "string"
-                                    },
-                                    "type": "groupBy"
-                                }
-                            ],
-                            "limit": 50
-                        }
-                    }
-                ],
-                "title": "Blocked or late dates",
-                "type": "table"
-            },
-            {
-                "datasource": {
-                    "type": "grafana-postgresql-datasource",
-                    "uid": "bdjtgy9rgn0u8d"
-                },
-                "description": "Statuses are clickable to access Job's monitoring in XVision",
-                "fieldConfig": {
-                    "defaults": {
-                        "color": {
-                            "mode": "palette-classic"
-                        },
-                        "custom": {
-                            "hideFrom": {
-                                "legend": false,
-                                "tooltip": false,
-                                "viz": false
-                            }
-                        },
-                        "links": [
-                            {
-                                "targetBlank": true,
-                                "title": "Job's monitoring filtered on status",
-                                "url": "https://${vtom_server_name}/xvision/monitoring/job(right:jobs-properties)?rNav=open&enabledStatusTypeList=%5B${__field.name}%5D"
-                            }
-                        ],
-                        "mappings": []
-                    },
-                    "overrides": [
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "4"
-                            },
-                            "properties": [
-                                {
-                                    "id": "color",
-                                    "value": {
-                                        "fixedColor": "#d20023",
-                                        "mode": "fixed"
-                                    }
-                                },
-                                {
-                                    "id": "displayName",
-                                    "value": "Error"
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "2"
-                            },
-                            "properties": [
-                                {
-                                    "id": "color",
-                                    "value": {
-                                        "fixedColor": "#379fff",
-                                        "mode": "fixed"
-                                    }
-                                },
-                                {
-                                    "id": "displayName",
-                                    "value": "Running"
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "1"
-                            },
-                            "properties": [
-                                {
-                                    "id": "color",
-                                    "value": {
-                                        "fixedColor": "#f4dc00",
-                                        "mode": "fixed"
-                                    }
-                                },
-                                {
-                                    "id": "displayName",
-                                    "value": "Waiting"
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "3"
-                            },
-                            "properties": [
-                                {
-                                    "id": "color",
-                                    "value": {
-                                        "fixedColor": "#3ea302",
-                                        "mode": "fixed"
-                                    }
-                                },
-                                {
-                                    "id": "displayName",
-                                    "value": "Finished"
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "6"
-                            },
-                            "properties": [
-                                {
-                                    "id": "color",
-                                    "value": {
-                                        "fixedColor": "#966361",
-                                        "mode": "fixed"
-                                    }
-                                },
-                                {
-                                    "id": "displayName",
-                                    "value": "Not scheduled"
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "5"
-                            },
-                            "properties": [
-                                {
-                                    "id": "color",
-                                    "value": {
-                                        "fixedColor": "#6356a4",
-                                        "mode": "fixed"
-                                    }
-                                },
-                                {
-                                    "id": "displayName",
-                                    "value": "Canceled"
-                                }
-                            ]
-                        },
-                        {
-                            "__systemRef": "hideSeriesFrom",
-                            "matcher": {
-                                "id": "byNames",
-                                "options": {
-                                    "mode": "exclude",
-                                    "names": [
-                                        "Not scheduled",
-                                        "Finished",
-                                        "Error",
-                                        "Running",
-                                        "Canceled"
-                                    ],
-                                    "prefix": "All except:",
-                                    "readOnly": true
-                                }
-                            },
-                            "properties": [
-                                {
-                                    "id": "custom.hideFrom",
-                                    "value": {
-                                        "legend": false,
-                                        "tooltip": false,
-                                        "viz": true
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                },
-                "gridPos": {
-                    "h": 11,
-                    "w": 12,
-                    "x": 0,
-                    "y": 15
-                },
-                "id": 4,
-                "options": {
-                    "displayLabels": [
-                        "name",
-                        "percent"
-                    ],
-                    "legend": {
-                        "displayMode": "list",
-                        "placement": "right",
-                        "showLegend": true,
-                        "values": [
-                            "percent"
-                        ]
-                    },
-                    "pieType": "pie",
-                    "reduceOptions": {
-                        "calcs": [
-                            "lastNotNull"
-                        ],
-                        "fields": "/.*/",
-                        "values": false
-                    },
-                    "tooltip": {
-                        "maxHeight": 600,
-                        "mode": "single",
-                        "sort": "none"
-                    }
-                },
-                "pluginVersion": "11.1.0-69622",
-                "targets": [
-                    {
-                        "datasource": {
-                            "type": "grafana-postgresql-datasource",
-                            "uid": "ediu5svd8blz4e"
-                        },
-                        "editorMode": "code",
-                        "format": "table",
-                        "rawQuery": true,
-                        "rawSql": "SELECT vt_core_jobs.vtstatus, COUNT(*)\r\nFROM \r\n  vt_core_jobs\r\n  JOIN vt_core_applications USING (vtappsid)\r\n  JOIN vt_core_environments ON vt_core_applications.vtenvsid = vt_core_environments.vtsid\r\nWHERE\r\n  CASE\r\n    WHEN $Environments <> 'all' THEN \r\n    CASE\r\n      WHEN $Applications <> 'all' THEN \r\n        vt_core_environments.vtname = $Environments AND vt_core_applications.vtname = $Applications\r\n      ELSE \r\n        vt_core_environments.vtname = $Environments\r\n    END\r\n    ELSE \r\n      TRUE\r\n  END\r\n  GROUP BY vt_core_jobs.vtstatus",
-                        "refId": "A",
-                        "sql": {
-                            "columns": [
-                                {
-                                    "parameters": [],
-                                    "type": "function"
-                                }
-                            ],
-                            "groupBy": [
-                                {
-                                    "property": {
-                                        "type": "string"
-                                    },
-                                    "type": "groupBy"
-                                }
-                            ],
-                            "limit": 50
-                        }
-                    }
-                ],
-                "title": "Jobs statuses distribution",
-                "transformations": [
-                    {
-                        "id": "rowsToFields",
-                        "options": {
-                            "mappings": [
-                                {
-                                    "fieldName": "vtstatus",
-                                    "handlerKey": "field.name"
-                                },
-                                {
-                                    "fieldName": "count",
-                                    "handlerKey": "field.value"
-                                }
-                            ]
-                        }
-                    }
-                ],
-                "type": "piechart"
-            },
-            {
-                "datasource": {
-                    "type": "grafana-postgresql-datasource",
-                    "uid": "bdjtgy9rgn0u8d"
-                },
-                "fieldConfig": {
-                    "defaults": {
-                        "custom": {
-                            "align": "auto",
-                            "cellOptions": {
-                                "type": "auto"
-                            },
-                            "filterable": true,
-                            "inspect": false
-                        },
-                        "mappings": [],
-                        "noValue": "No Job in Error",
-                        "thresholds": {
-                            "mode": "absolute",
-                            "steps": [
-                                {
-                                    "color": "green",
-                                    "value": null
-                                },
-                                {
-                                    "color": "red",
-                                    "value": 80
-                                }
-                            ]
-                        }
-                    },
-                    "overrides": [
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "Jobs"
-                            },
-                            "properties": [
-                                {
-                                    "id": "links",
-                                    "value": [
-                                        {
-                                            "targetBlank": true,
-                                            "title": "Visual TOM graph",
-                                            "url": "https://${vtom_server_name}/xvision/graph/${__data.fields.env}/${__data.fields.app}(right:app-job-properties/${__data.fields.env}/${__data.fields.app}/${__data.fields.job})?rNav=open"
-                                        },
-                                        {
-                                            "targetBlank": true,
-                                            "title": "Logs from Splunk",
-                                            "url": "https://${splunk_server_name}/app/search/search?q=search%20*%20%7C%20spath%20Environment%20%7C%20search%20Environment%3D${__data.fields.env}%20%7C%20spath%20Application%20%7C%20search%20Application%3D${__data.fields.app}%7C%20spath%20Job%20%7C%20search%20Job%3D${__data.fields.job}&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=&earliest=0&latest=&sid=1715794827.2127"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "id": "custom.width",
-                                    "value": 324
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "env"
-                            },
-                            "properties": [
-                                {
-                                    "id": "links",
-                                    "value": []
-                                },
-                                {
-                                    "id": "custom.hidden",
-                                    "value": true
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "app"
-                            },
-                            "properties": [
-                                {
-                                    "id": "custom.hidden",
-                                    "value": true
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "job"
-                            },
-                            "properties": [
-                                {
-                                    "id": "custom.hidden",
-                                    "value": true
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "Action"
-                            },
-                            "properties": [
-                                {
-                                    "id": "noValue",
-                                    "value": "Restart"
-                                },
-                                {
-                                    "id": "links",
-                                    "value": [
-                                        {
-                                            "targetBlank": true,
-                                            "title": "API",
-                                            "url": "https://${vitc_server_name}/selfget.jsp?token=${vitc_token}&bundle=GRAFANA&service=StartJob&sender=Grafana&forms={\"Env\":\"${__data.fields.env}\",\"App\":\"${__data.fields.app}\",\"Job\":\"${__data.fields.job}\"}"
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "matcher": {
-                                "id": "byName",
-                                "options": "Mark"
-                            },
-                            "properties": [
-                                {
-                                    "id": "custom.width",
-                                    "value": 247
-                                }
-                            ]
-                        }
-                    ]
-                },
-                "gridPos": {
-                    "h": 11,
-                    "w": 12,
-                    "x": 12,
-                    "y": 15
-                },
-                "id": 1,
-                "options": {
-                    "cellHeight": "sm",
-                    "footer": {
-                        "countRows": false,
-                        "fields": "",
-                        "reducer": [
-                            "sum"
-                        ],
-                        "show": false
-                    },
-                    "showHeader": true,
-                    "sortBy": []
-                },
-                "pluginVersion": "11.0.0",
-                "targets": [
-                    {
-                        "datasource": {
-                            "type": "grafana-postgresql-datasource",
-                            "uid": "ediu5svd8blz4e"
-                        },
-                        "editorMode": "code",
-                        "format": "table",
-                        "rawQuery": true,
-                        "rawSql": "SELECT\r\n  vt_core_environments.vtname || '/' || vt_core_applications.vtname || '/' || vt_core_jobs.vtname as \"Jobs\",\r\n  vtmessage as \"Message\",\r\n  vt_core_environments.vtname as Env,\r\n  vt_core_applications.vtname as App,\r\n  vt_core_jobs.vtname as Job, \r\n  CASE\r\n    WHEN vt_core_jobs.vtsubstatus = 0 THEN 'Not taken into account'\r\n    WHEN vt_core_jobs.vtsubstatus = 1 THEN 'Taken into account'\r\n  END \"Mark\",\r\n  '' AS \"Action\"\r\nFROM\r\n  vt_core_jobs\r\n  JOIN vt_core_applications USING (vtappsid)\r\n  JOIN vt_core_environments ON vt_core_applications.vtenvsid = vt_core_environments.vtsid\r\nWHERE\r\n  CASE\r\n    WHEN $Environments <> 'all' THEN CASE\r\n      WHEN $Applications <> 'all' THEN \r\n        vt_core_jobs.vtstatus = '4' AND vt_core_environments.vtname = $Environments AND vt_core_applications.vtname = $Applications\r\n      ELSE \r\n        vt_core_jobs.vtstatus = '4' AND vt_core_environments.vtname = $Environments\r\n    END\r\n    ELSE \r\n      vt_core_jobs.vtstatus = '4'\r\n  END",
-                        "refId": "A",
-                        "sql": {
-                            "columns": [
-                                {
-                                    "parameters": [],
-                                    "type": "function"
-                                }
-                            ],
-                            "groupBy": [
-                                {
-                                    "property": {
-                                        "type": "string"
-                                    },
-                                    "type": "groupBy"
-                                }
-                            ],
-                            "limit": 50
-                        }
-                    }
-                ],
-                "title": "Failed jobs",
-                "type": "table"
-            }
-        ],
-        "refresh": "30s",
-        "schemaVersion": 39,
-        "tags": [
-            "VTOM",
-            "Monitoring",
-            "templates"
-        ],
-        "templating": {
-            "list": [
+                "title": "Go to history in XVision",
+                "url": "https://${vtom_server_name}/xvision/history/job-execution?job-execution-history=%7B\"status\":%5B3%5D,\"period\":%7B\"from\":%7B${__data.fields.filter}%7D,\"to\":%7B${__data.fields.filter}%7D%7D%7D${__data.fields.filterenvtapp}"
+              }
+            ],
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
                 {
-                    "allValue": "'all'",
-                    "current": {
-                        "selected": false,
-                        "text": "Exploitation",
-                        "value": "Exploitation"
-                    },
-                    "datasource": {
-                        "type": "grafana-postgresql-datasource",
-                        "uid": "bdjtgy9rgn0u8d"
-                    },
-                    "definition": "SELECT vtname as \"Environments\"\nFROM vt_core_environments",
-                    "hide": 0,
-                    "includeAll": true,
-                    "multi": false,
-                    "name": "Environments",
-                    "options": [],
-                    "query": "SELECT vtname as \"Environments\"\nFROM vt_core_environments",
-                    "refresh": 1,
-                    "regex": "",
-                    "skipUrlSync": false,
-                    "sort": 0,
-                    "type": "query"
+                  "color": "green",
+                  "value": null
                 },
                 {
-                    "allValue": "'all'",
-                    "current": {
-                        "selected": false,
-                        "text": "All",
-                        "value": "$__all"
-                    },
-                    "datasource": {
-                        "type": "grafana-postgresql-datasource",
-                        "uid": "bdjtgy9rgn0u8d"
-                    },
-                    "definition": "SELECT vt_core_applications.vtname AS \"Application\"\nFROM vt_core_applications\nJOIN vt_core_environments ON vt_core_applications.vtenvsid = vt_core_environments.vtsid\nWHERE vt_core_environments.vtname = $Environments",
-                    "hide": 0,
-                    "includeAll": true,
-                    "multi": false,
-                    "name": "Applications",
-                    "options": [],
-                    "query": "SELECT vt_core_applications.vtname AS \"Application\"\nFROM vt_core_applications\nJOIN vt_core_environments ON vt_core_applications.vtenvsid = vt_core_environments.vtsid\nWHERE vt_core_environments.vtname = $Environments",
-                    "refresh": 1,
-                    "regex": "",
-                    "skipUrlSync": false,
-                    "sort": 5,
-                    "type": "query"
-                },
-                {
-                    "hide": 2,
-                    "name": "vtom_server_name",
-                    "query": "TOBEDEFINED",
-                    "skipUrlSync": false,
-                    "type": "constant"
-                },
-                {
-                    "hide": 2,
-                    "name": "vitc_server_name",
-                    "query": "TOBEDEFINED",
-                    "skipUrlSync": false,
-                    "type": "constant"
-                },
-                {
-                    "hide": 2,
-                    "name": "vitc_token",
-                    "query": "TOBEDEFINED",
-                    "skipUrlSync": false,
-                    "type": "constant"
-                },
-                {
-                    "hide": 2,
-                    "label": "Splunk server name",
-                    "name": "splunk_server_name",
-                    "query": "TOBEDEFINED",
-                    "skipUrlSync": false,
-                    "type": "constant"
+                  "color": "red",
+                  "value": 80
                 }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        },
+        "id": 11,
+        "options": {
+          "barRadius": 0,
+          "barWidth": 0.97,
+          "fullHighlight": false,
+          "groupWidth": 0.7,
+          "legend": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "orientation": "auto",
+          "showValue": "never",
+          "stacking": "none",
+          "tooltip": {
+            "maxHeight": 600,
+            "mode": "single",
+            "sort": "none"
+          },
+          "xField": "day",
+          "xTickLabelRotation": -45,
+          "xTickLabelSpacing": 0
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-postgresql-datasource",
+              "uid": "cxO6FYlvk"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT \r\n  --vtenvname as Environnement ,\r\n  vtexpdatevalue::date as Day,\r\n  '\"year\":'||DATE_PART('year',vtexpdatevalue)||',\"month\":'||DATE_PART('month',vtexpdatevalue)\r\n  ||',\"day\":'||DATE_PART('day',vtexpdatevalue) as Filter ,\r\nCASE \r\n    WHEN $Environments <> 'all' THEN\r\n      CASE WHEN $Applications <> 'all' THEN \r\n       '&filters={\"condition\":\"AND\",\"filters\":{\"environments\":{\"name\":{\"comparator\":\"EQUALS\",\"valueToCompare\":\"'||$Environments||'\"}},\"applications\":{\"name\":{\"comparator\":\"EQUALS\",\"valueToCompare\":\"'||$Applications||'\"}}}}'\r\n      ELSE\r\n        '&filters={\"condition\":\"AND\",\"filters\":{\"environments\":{\"name\":{\"comparator\":\"EQUALS\",\"valueToCompare\":\"'||$Environments||'\"}}}}'\r\n      END\r\n    ELSE\r\n      ''\r\n    END filterEnvtApp,\r\n  count(*) as Nombre\r\nFROM vt_stats_job \r\nWHERE CASE \r\n    WHEN $Environments <> 'all' THEN\r\n      CASE WHEN $Applications <> 'all' THEN \r\n        vtstatus=4 AND vtexpdatevalue >= CURRENT_DATE - INTERVAL '30 days' AND vtenvname = $Environments AND vtapplname = $Applications \r\n      ELSE\r\n        vtstatus=4 AND vtexpdatevalue >= CURRENT_DATE - INTERVAL '30 days' AND vtenvname = $Environments\r\n      END\r\n    ELSE\r\n      vtstatus=4 AND vtexpdatevalue >= CURRENT_DATE - INTERVAL '30 days'\r\n    END\r\nGROUP BY --vtenvname,\r\n vtexpdatevalue\r\n order by to_char(vtexpdatevalue,'YYYYMMDD')",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          },
+          {
+            "datasource": {
+              "type": "grafana-postgresql-datasource",
+              "uid": "cxO6FYlvk"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "hide": false,
+            "rawQuery": true,
+            "rawSql": "SELECT \r\n  count(*)/30 as AvgErrors\r\nFROM vt_stats_job \r\nWHERE CASE \r\n    WHEN $Environments <> 'all' THEN\r\n      CASE WHEN $Applications <> 'all' THEN \r\n        vtstatus=4 AND vtexpdatevalue >= CURRENT_DATE - INTERVAL '30 days' AND vtenvname = $Environments AND vtapplname = $Applications \r\n      ELSE\r\n        vtstatus=4 AND vtexpdatevalue >= CURRENT_DATE - INTERVAL '30 days' AND vtenvname = $Environments\r\n      END\r\n    ELSE\r\n      vtstatus=4 AND vtexpdatevalue >= CURRENT_DATE - INTERVAL '30 days'\r\n    END",
+            "refId": "B",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          }
+        ],
+        "title": "Number of errors per day",
+        "transformations": [
+          {
+            "id": "configFromData",
+            "options": {
+              "configRefId": "B",
+              "mappings": [
+                {
+                  "fieldName": "avgerrors",
+                  "handlerKey": "threshold1"
+                }
+              ]
+            }
+          },
+          {
+            "id": "formatTime",
+            "options": {
+              "outputFormat": "DD-MMM",
+              "timeField": "day",
+              "useTimezone": true
+            }
+          }
+        ],
+        "type": "barchart"
+      },
+      {
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "cxO6FYlvk"
+        },
+        "description": "Blocked and late dates",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "noValue": "No locked dates",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Nb of blocking Jobs"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 235
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Type"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 103
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Switch time"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 106
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "vtid"
+              },
+              "properties": [
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Date"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Go to Visual TOM Dates monitoring",
+                      "url": "https://${vtom_server_name}/xvision/monitoring/date(right:date-properties/${__data.fields.vtid})?rNav=open"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 111
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        },
+        "id": 6,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "Status"
+            }
+          ]
+        },
+        "pluginVersion": "11.0.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-postgresql-datasource",
+              "uid": "cxO6FYlvk"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT CASE WHEN COUNT(vtjobsid)>0 THEN '🔒Blocked' ELSE '' END || CASE WHEN (left(text(to_timestamp(vtvalue/1000000)),10)::date!=CURRENT_DATE AND (vtswitchtime * interval '1 sec'- INTERVAL '24 hours')::time < CURRENT_TIME) THEN '🕒Late' ELSE '' END \"Status\",\r\nLEFT(text(to_timestamp(vtvalue/1000000)),10) \"Value\", vtname \"Date\", (vtswitchtime * interval '1 sec') \"Switch time\",\r\nCASE vttype WHEN 'A' THEN 'Automatic' WHEN 'S' THEN 'System' ELSE 'Constant' END \"Type\",\r\nCASE vtrecovery WHEN '0' THEN '✔️' ELSE '-' END \"Automatic recovery\", CASE WHEN COUNT(vtjobsid)>0 THEN COUNT(vtjobsid)|| ' Jobs' ELSE '-' END \"Blocking Jobs\", vtid from vt_core_dates dates\r\nLEFT JOIN vt_core_date_blocking_jobs bloc_jobs ON dates.vtid=bloc_jobs.vtdateid\r\nWHERE (left(text(to_timestamp(vtvalue/1000000)),10)::date!=CURRENT_DATE AND (vtswitchtime * interval '1 sec'- INTERVAL '24 hours')::time < CURRENT_TIME)\r\nOR vtjobsid IS NOT NULL\r\nGROUP BY vtid",
+            "refId": "Date bloquée",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          }
+        ],
+        "title": "Blocked or late dates",
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "cxO6FYlvk"
+        },
+        "description": "Statuses are clickable to access Job's monitoring in XVision",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              }
+            },
+            "links": [
+              {
+                "targetBlank": true,
+                "title": "Job's monitoring filtered on status",
+                "url": "https://${vtom_server_name}/xvision/monitoring/job(right:jobs-properties)?rNav=open&enabledStatusTypeList=%5B${__field.name}%5D"
+              }
+            ],
+            "mappings": []
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "4"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#d20023",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "displayName",
+                  "value": "Error"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "2"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#379fff",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "displayName",
+                  "value": "Running"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "1"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#f4dc00",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "displayName",
+                  "value": "Waiting"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "3"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#3ea302",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "displayName",
+                  "value": "Finished"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "6"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#966361",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "displayName",
+                  "value": "Not scheduled"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "5"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "#6356a4",
+                    "mode": "fixed"
+                  }
+                },
+                {
+                  "id": "displayName",
+                  "value": "Canceled"
+                }
+              ]
+            },
+            {
+              "__systemRef": "hideSeriesFrom",
+              "matcher": {
+                "id": "byNames",
+                "options": {
+                  "mode": "exclude",
+                  "names": [
+                    "Not scheduled",
+                    "Finished",
+                    "Error",
+                    "Running",
+                    "Canceled"
+                  ],
+                  "prefix": "All except:",
+                  "readOnly": true
+                }
+              },
+              "properties": [
+                {
+                  "id": "custom.hideFrom",
+                  "value": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 12,
+          "x": 0,
+          "y": 15
+        },
+        "id": 4,
+        "options": {
+          "displayLabels": [
+            "name",
+            "percent"
+          ],
+          "legend": {
+            "displayMode": "list",
+            "placement": "right",
+            "showLegend": true,
+            "values": [
+              "percent"
             ]
+          },
+          "pieType": "pie",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/.*/",
+            "values": false
+          },
+          "tooltip": {
+            "maxHeight": 600,
+            "mode": "single",
+            "sort": "none"
+          }
         },
-        "time": {
-            "from": "now-6h",
-            "to": "now"
+        "pluginVersion": "11.1.0-69622",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-postgresql-datasource",
+              "uid": "cxO6FYlvk"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT vt_core_jobs.vtstatus, COUNT(*)\r\nFROM \r\n  vt_core_jobs\r\n  JOIN vt_core_applications USING (vtappsid)\r\n  JOIN vt_core_environments ON vt_core_applications.vtenvsid = vt_core_environments.vtsid\r\nWHERE\r\n  CASE\r\n    WHEN $Environments <> 'all' THEN \r\n    CASE\r\n      WHEN $Applications <> 'all' THEN \r\n        vt_core_environments.vtname = $Environments AND vt_core_applications.vtname = $Applications\r\n      ELSE \r\n        vt_core_environments.vtname = $Environments\r\n    END\r\n    ELSE \r\n      TRUE\r\n  END\r\n  GROUP BY vt_core_jobs.vtstatus",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          }
+        ],
+        "title": "Jobs statuses distribution",
+        "transformations": [
+          {
+            "id": "rowsToFields",
+            "options": {
+              "mappings": [
+                {
+                  "fieldName": "vtstatus",
+                  "handlerKey": "field.name"
+                },
+                {
+                  "fieldName": "count",
+                  "handlerKey": "field.value"
+                }
+              ]
+            }
+          }
+        ],
+        "type": "piechart"
+      },
+      {
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "cxO6FYlvk"
         },
-        "timeRangeUpdatedDuringEditOrView": false,
-        "timepicker": {
-            "hidden": true
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "filterable": true,
+              "inspect": false
+            },
+            "mappings": [],
+            "noValue": "No Job in Error",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Jobs"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Visual TOM graph",
+                      "url": "https://${vtom_server_name}/xvision/graph/${__data.fields.env}/${__data.fields.app}(right:app-job-properties/${__data.fields.env}/${__data.fields.app}/${__data.fields.job})?rNav=open"
+                    },
+                    {
+                      "targetBlank": true,
+                      "title": "Logs from Splunk",
+                      "url": "https://${splunk_server_name}/app/search/search?q=search%20*%20%7C%20spath%20Environment%20%7C%20search%20Environment%3D${__data.fields.env}%20%7C%20spath%20Application%20%7C%20search%20Application%3D${__data.fields.app}%7C%20spath%20Job%20%7C%20search%20Job%3D${__data.fields.job}&display.page.search.mode=smart&dispatch.sample_ratio=1&workload_pool=&earliest=0&latest=&sid=1715794827.2127"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.width",
+                  "value": 324
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "env"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": []
+                },
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "app"
+              },
+              "properties": [
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "job"
+              },
+              "properties": [
+                {
+                  "id": "custom.hidden",
+                  "value": true
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Action"
+              },
+              "properties": [
+                {
+                  "id": "noValue",
+                  "value": "Restart"
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "API",
+                      "url": "https://${vitc_server_name}/selfget.jsp?token=${vitc_token}&bundle=GRAFANA&service=StartJob&sender=Grafana&forms={\"Env\":\"${__data.fields.env}\",\"App\":\"${__data.fields.app}\",\"Job\":\"${__data.fields.job}\"}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Mark"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 247
+                }
+              ]
+            }
+          ]
         },
-        "timezone": "browser",
-        "title": "Visual TOM Monitoring",
-        "uid": "adjkwqjegmygwb",
-        "version": 55,
-        "weekStart": ""
-    }
-}
+        "gridPos": {
+          "h": 11,
+          "w": 12,
+          "x": 12,
+          "y": 15
+        },
+        "id": 1,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "11.0.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-postgresql-datasource",
+              "uid": "cxO6FYlvk"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT\r\n  vt_core_environments.vtname || '/' || vt_core_applications.vtname || '/' || vt_core_jobs.vtname as \"Jobs\",\r\n  vtmessage as \"Message\",\r\n  vt_core_environments.vtname as Env,\r\n  vt_core_applications.vtname as App,\r\n  vt_core_jobs.vtname as Job, \r\n  CASE\r\n    WHEN vt_core_jobs.vtsubstatus = 0 THEN 'Not taken into account'\r\n    WHEN vt_core_jobs.vtsubstatus = 1 THEN 'Taken into account'\r\n  END \"Mark\",\r\n  '' AS \"Action\"\r\nFROM\r\n  vt_core_jobs\r\n  JOIN vt_core_applications USING (vtappsid)\r\n  JOIN vt_core_environments ON vt_core_applications.vtenvsid = vt_core_environments.vtsid\r\nWHERE\r\n  CASE\r\n    WHEN $Environments <> 'all' THEN CASE\r\n      WHEN $Applications <> 'all' THEN \r\n        vt_core_jobs.vtstatus = '4' AND vt_core_environments.vtname = $Environments AND vt_core_applications.vtname = $Applications\r\n      ELSE \r\n        vt_core_jobs.vtstatus = '4' AND vt_core_environments.vtname = $Environments\r\n    END\r\n    ELSE \r\n      vt_core_jobs.vtstatus = '4'\r\n  END",
+            "refId": "A",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          }
+        ],
+        "title": "Failed jobs",
+        "type": "table"
+      }
+    ],
+    "refresh": "30s",
+    "schemaVersion": 39,
+    "tags": [
+      "VTOM",
+      "Monitoring",
+      "templates"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": "'all'",
+          "current": {
+            "selected": false,
+            "text": "Exploitation",
+            "value": "Exploitation"
+          },
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "cxO6FYlvk"
+          },
+          "definition": "SELECT vtname as \"Environments\"\nFROM vt_core_environments",
+          "hide": 0,
+          "includeAll": true,
+          "multi": false,
+          "name": "Environments",
+          "options": [],
+          "query": "SELECT vtname as \"Environments\"\nFROM vt_core_environments",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": "'all'",
+          "current": {
+            "selected": false,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "cxO6FYlvk"
+          },
+          "definition": "SELECT vt_core_applications.vtname AS \"Application\"\nFROM vt_core_applications\nJOIN vt_core_environments ON vt_core_applications.vtenvsid = vt_core_environments.vtsid\nWHERE vt_core_environments.vtname = $Environments",
+          "hide": 0,
+          "includeAll": true,
+          "multi": false,
+          "name": "Applications",
+          "options": [],
+          "query": "SELECT vt_core_applications.vtname AS \"Application\"\nFROM vt_core_applications\nJOIN vt_core_environments ON vt_core_applications.vtenvsid = vt_core_environments.vtsid\nWHERE vt_core_environments.vtname = $Environments",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 5,
+          "type": "query"
+        },
+        {
+          "hide": 2,
+          "name": "vtom_server_name",
+          "query": "TOBEDEFINED",
+          "skipUrlSync": false,
+          "type": "constant"
+        },
+        {
+          "hide": 2,
+          "name": "vitc_server_name",
+          "query": "TOBEDEFINED",
+          "skipUrlSync": false,
+          "type": "constant"
+        },
+        {
+          "hide": 2,
+          "name": "vitc_token",
+          "query": "TOBEDEFINED",
+          "skipUrlSync": false,
+          "type": "constant"
+        },
+        {
+          "hide": 2,
+          "label": "Splunk server name",
+          "name": "splunk_server_name",
+          "query": "TOBEDEFINED",
+          "skipUrlSync": false,
+          "type": "constant"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timeRangeUpdatedDuringEditOrView": false,
+    "timepicker": {
+      "hidden": true
+    },
+    "timezone": "browser",
+    "title": "Visual TOM Monitoring",
+    "uid": "vtom-monitoring",
+    "version": 0,
+    "weekStart": ""
+  }
